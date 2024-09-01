@@ -1,3 +1,5 @@
+using Core.Features.Vocabulary.Entities;
+using Core.Features.Vocabulary.InterfaceAdapters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace english_api_dotnet.Controllers;
@@ -11,22 +13,16 @@ public class VocabularyController : ControllerBase
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    private readonly ILogger<VocabularyController> _logger;
+    private readonly VocabularyRepositoryInterface db;
 
-    public VocabularyController(ILogger<VocabularyController> logger)
+    public VocabularyController(VocabularyRepositoryInterface db)
     {
-        _logger = logger;
+        this.db = db;
     }
 
     [HttpGet(Name = "Test")]
-    public IEnumerable<WeatherForecast> Get()
+    public async Task<IEnumerable<VocabularyEntity>?> Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+        return await this.db.getAll();
     }
 }
