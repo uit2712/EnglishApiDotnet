@@ -1,3 +1,12 @@
+INSERT INTO Topics VALUES (N'Thú cưng'),
+(N'Các loài chim'),
+(N'Các động vật biển/dưới nước'),
+(N'Động vật hoang dã'),
+(N'Con vật nuôi/trang trại'),
+(N'Lưỡng cư'),
+(N'Côn trùng không có cánh'),
+(N'Côn trùng có cánh');
+
 INSERT INTO Vocabularies (Name, Pronunciation, Meaning, TopicId) VALUES (N'cat', N'/kæt/', N'mèo', 1),
 (N'kitten', N'/ˈkɪt.ən/', N'mèo con', 1),
 (N'dog', N'/dɒg/', N'chó', 1),
