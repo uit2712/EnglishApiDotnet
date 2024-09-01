@@ -15,4 +15,8 @@ public class VocabularyEntity {
     [Required(ErrorMessage = "Meaning is required")]
     [JsonProperty]
     public string Meaning { get; set; }
+    [JsonProperty]
+    public string? Image { get; set; }
+    [JsonProperty]
+    public int TopicId { get; set; }
 }
