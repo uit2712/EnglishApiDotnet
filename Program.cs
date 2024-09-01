@@ -9,12 +9,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<EnglishContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("RedisConStr");
+    options.InstanceName = "RedisInstance";
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<VocabularyRepositoryInterface, VocabularyRepository>();
+builder.Services.AddScoped<CachedVocabularyRepositoryInterface, CachedVocabularyRepository>();
 
 var app = builder.Build();
 

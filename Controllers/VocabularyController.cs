@@ -13,9 +13,9 @@ public class VocabularyController : ControllerBase
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    private readonly VocabularyRepositoryInterface db;
+    private readonly CachedVocabularyRepositoryInterface db;
 
-    public VocabularyController(VocabularyRepositoryInterface db)
+    public VocabularyController(CachedVocabularyRepositoryInterface db)
     {
         this.db = db;
     }
