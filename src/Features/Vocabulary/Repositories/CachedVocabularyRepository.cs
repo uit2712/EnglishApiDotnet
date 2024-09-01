@@ -77,6 +77,6 @@ public class CachedVocabularyRepository : CachedVocabularyRepositoryInterface
     }
 
     private string GetIdKeyCache(long id) {
-        return String.Format("{0}:${1}", GROUP_CACHE, id);
+        return String.Format("{0}:{1}", GROUP_CACHE, id);
     }
 }

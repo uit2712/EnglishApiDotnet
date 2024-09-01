@@ -8,11 +8,6 @@ namespace english_api_dotnet.Controllers;
 [Route("[controller]")]
 public class VocabularyController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
     private readonly CachedVocabularyRepositoryInterface db;
 
     public VocabularyController(CachedVocabularyRepositoryInterface db)
@@ -20,9 +15,15 @@ public class VocabularyController : ControllerBase
         this.db = db;
     }
 
-    [HttpGet(Name = "Test")]
+    [HttpGet]
     public async Task<GetListVocabulariesResult> Get()
     {
         return await this.db.GetAll();
+    }
+
+    [HttpGet("{id}")]
+    public async Task<GetVocabularyResult> GetById(long id)
+    {
+        return await this.db.Get(id);
     }
 }

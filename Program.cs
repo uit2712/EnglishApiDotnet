@@ -12,7 +12,6 @@ builder.Services.AddDbContext<EnglishContext>(options =>
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("RedisConStr");
-    options.InstanceName = "RedisInstance";
 });
 
 builder.Services.AddControllers();
