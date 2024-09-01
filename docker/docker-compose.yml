@@ -1,0 +1,15 @@
+services:
+  backend:
+    build: api
+    expose: 
+      - 5000
+
+  frontend:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+    ports:
+      - 4000:4000
+    
