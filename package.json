@@ -1,5 +1,6 @@
 {
     "scripts": {
-        "start": "dotnet run --launch-profile https"
+        "start": "dotnet watch run --launch-profile https",
+        "install": "dotnet add package Microsoft.EntityFrameworkCore && dotnet add package Microsoft.EntityFrameworkCore.SqlServer"
     }
 }

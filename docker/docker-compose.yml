@@ -3,10 +3,31 @@ services:
     container_name: db
     image: mcr.microsoft.com/mssql/server
     environment:
-      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
-      - ACCEPT_EULA="Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      MSSQL_PASSWORD: ${MSSQL_SA_PASSWORD}
+      ACCEPT_EULA: "Y"
     ports:
       - 1433:1433
     env_file:
       - .env
+    networks:
+      - dotnet-network
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    env_file: .env
+    environment:
+      ADMINER_DEFAULT_SERVER: ${DB_HOST}
+      ADM_INSTALL_MSSQL: true
+      PHP_FPM_INSTALL_MSSQL: true
+      WORKSPACE_INSTALL_MSSQL: true
+    networks:
+      - dotnet-network
+
+networks:
+  dotnet-network:
     
