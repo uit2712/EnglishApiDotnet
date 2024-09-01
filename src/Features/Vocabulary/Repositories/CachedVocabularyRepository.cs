@@ -1,3 +1,4 @@
+using Core.Constants;
 using Core.Features.Vocabulary.Entities;
 using Core.Features.Vocabulary.InterfaceAdapters;
 using Core.Features.Vocabulary.Models;
@@ -44,5 +45,38 @@ public class CachedVocabularyRepository : CachedVocabularyRepositoryInterface
 
     private string GetAllKeyCache() {
         return String.Format("{0}:ALL", GROUP_CACHE);
+    }
+
+    public async Task<GetVocabularyResult> Get(long id)
+    {
+        var result = new GetVocabularyResult();
+        if (id <= 0) {
+            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "id");
+            return result;
+        }
+
+        var keyCache = this.GetIdKeyCache(id);
+        var cachedData = await _cache.GetAsync(keyCache);
+
+        if (cachedData != null)
+        {
+            var data = CacheHelper.Decode<VocabularyEntity>(cachedData);
+            result.Success = true;
+            result.Message = "Get vocabulary by id from cache succes";
+            result.Data = data;
+
+            return result;
+        }
+
+        result = await this._db.Get(id);
+        if (result.Success) {
+            await this._cache.SetAsync(keyCache, CacheHelper.Encode(result.Data));
+        }
+
+        return result;
+    }
+
+    private string GetIdKeyCache(long id) {
+        return String.Format("{0}:${1}", GROUP_CACHE, id);
     }
 }

@@ -26,7 +26,22 @@ public class VocabularyRepository : VocabularyRepositoryInterface
 
         result.Success = true;
         result.Message = "Get all vocabularies success";
-        result.Data = await this._context.Vocabularies.ToListAsync();
+        return result;
+    }
+
+    public async Task<GetVocabularyResult> Get(long id)
+    {
+        var result = new GetVocabularyResult
+        {
+            Data = await this._context.Vocabularies.FirstOrDefaultAsync(item => item.Id == id)
+        };
+        if (null == result.Data) {
+            result.Message = "Get vocabulary by id failed";
+            return result;
+        }
+
+        result.Success = true;
+        result.Message = "Get vocabulary by id success";
         return result;
     }
 }
