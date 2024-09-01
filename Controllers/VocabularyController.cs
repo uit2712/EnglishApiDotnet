@@ -1,5 +1,5 @@
-using Core.Features.Vocabulary.Entities;
 using Core.Features.Vocabulary.InterfaceAdapters;
+using Core.Features.Vocabulary.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace english_api_dotnet.Controllers;
@@ -21,8 +21,8 @@ public class VocabularyController : ControllerBase
     }
 
     [HttpGet(Name = "Test")]
-    public async Task<IEnumerable<VocabularyEntity>?> Get()
+    public async Task<GetListVocabulariesResult> Get()
     {
-        return await this.db.getAll();
+        return await this.db.GetAll();
     }
 }

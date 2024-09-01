@@ -1,7 +1,7 @@
-using Core.Features.Vocabulary.Entities;
+using Core.Features.Vocabulary.Models;
 
 namespace Core.Features.Vocabulary.InterfaceAdapters;
 
 public interface VocabularyRepositoryInterface {
-    public Task<List<VocabularyEntity>?> getAll();
+    public Task<GetListVocabulariesResult> GetAll();
 }

@@ -1,6 +1,5 @@
 using Core.EnglishContext;
 using Core.Features.Vocabulary.InterfaceAdapters;
-using Core.Features.Vocabulary.Mappers;
 using Core.Features.Vocabulary.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +14,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<VocabularyMapperInterface, VocabularyMapper>();
 builder.Services.AddScoped<VocabularyRepositoryInterface, VocabularyRepository>();
 
 var app = builder.Build();
