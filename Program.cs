@@ -1,4 +1,5 @@
 using Core.EnglishContext;
+using Core.Features.Topic.DependencyInjection;
 using Core.Features.Topic.InterfaceAdapters;
 using Core.Features.Topic.Repositories;
 using Core.Features.Topic.UseCases;
@@ -25,10 +26,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<VocabularyRepositoryInterface, VocabularyRepository>();
 builder.Services.AddScoped<CachedVocabularyRepositoryInterface, CachedVocabularyRepository>();
 
-builder.Services.AddScoped<TopicRepositoryInterface, TopicRepository>();
-builder.Services.AddScoped<CachedTopicRepositoryInterface, CachedTopicRepository>();
-
-builder.Services.AddScoped<GetListVocabulariesByTopicIdUseCase, GetListVocabulariesByTopicIdUseCase>();
+TopicDependencyInjection.Init(builder.Services);
 
 var app = builder.Build();
 

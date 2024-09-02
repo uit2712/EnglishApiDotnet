@@ -29,7 +29,8 @@ public class CachedTopicRepository : CachedTopicRepositoryInterface
         if (cachedData != null)
         {
             var listIdsFromCache = CacheHelper.Decode<List<int>>(cachedData);
-            if (null != listIdsFromCache && listIdsFromCache.Count() > 0) {
+            if (null != listIdsFromCache && listIdsFromCache.Count() > 0)
+            {
                 listIds = listIdsFromCache;
             }
         }
@@ -46,23 +47,26 @@ public class CachedTopicRepository : CachedTopicRepositoryInterface
         }
 
         result = await _db.GetAll();
-        if (result.isHasData() && result.Data?.Count() > 0) {
+        if (result.isHasData() && result.Data?.Count() > 0)
+        {
             listIds = result.Data.Select(item => item.Id);
             await _cache.SetAsync(keyCache, CacheHelper.Encode(listIds));
             await Task.WhenAll(result.Data.Select(item => _cache.SetAsync(GetIdKeyCache(item.Id), CacheHelper.Encode(item))));
-        } 
+        }
 
         return result;
     }
 
-    private string GetAllKeyCache() {
+    private string GetAllKeyCache()
+    {
         return String.Format("{0}:ALL", GROUP_CACHE);
     }
 
-    public async Task<GetTopicResult> Get(long id)
+    public async Task<GetTopicResult> Get(int id)
     {
         var result = new GetTopicResult();
-        if (id <= 0) {
+        if (id <= 0)
+        {
             result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "id");
             return result;
         }
@@ -81,14 +85,27 @@ public class CachedTopicRepository : CachedTopicRepositoryInterface
         }
 
         result = await this._db.Get(id);
-        if (result.Success) {
+        if (result.Success)
+        {
             await this._cache.SetAsync(keyCache, CacheHelper.Encode(result.Data));
         }
 
         return result;
     }
 
-    private string GetIdKeyCache(long id) {
+    private string GetIdKeyCache(long id)
+    {
         return String.Format("{0}:{1}", GROUP_CACHE, id);
+    }
+
+    public async Task<GetTopicResult> UpdateTopicName(int id, string name)
+    {
+        var updateResult = await _db.UpdateTopicName(id, name);
+        if (updateResult.Success)
+        {
+            await _cache.RemoveAsync(GetIdKeyCache(id));
+        }
+
+        return updateResult;
     }
 }
