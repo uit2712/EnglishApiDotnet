@@ -2,6 +2,7 @@ services:
   db:
     container_name: db
     image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
     volumes:
       - ./db:/var/opt/mssql/data
     user: root
