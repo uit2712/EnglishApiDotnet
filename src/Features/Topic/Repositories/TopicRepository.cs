@@ -69,7 +69,7 @@ public class TopicRepository : TopicRepositoryInterface
         }
 
         result = await Get(id);
-        if (result.isHasData() == false)
+        if (null == result.Data)
         {
             return result;
         }
@@ -79,6 +79,21 @@ public class TopicRepository : TopicRepositoryInterface
         result.Success = totalUpdatedRows > 0;
         result.Message = "Update topic name success";
 
+        return result;
+    }
+
+    public async Task<GetListTopicsResult> GetByGroupId(int groupId)
+    {
+        var result = new GetListTopicsResult();
+        if (groupId <= 0)
+        {
+            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "groupId");
+            return result;
+        }
+
+        result.Success = true;
+        result.Data = await _context.Topics.Where(item => item.GroupId == groupId).ToListAsync();
+        result.Message = "Get list topics by group id success";
         return result;
     }
 }

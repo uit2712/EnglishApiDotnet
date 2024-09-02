@@ -85,7 +85,7 @@ public class CachedTopicRepository : CachedTopicRepositoryInterface
         }
 
         result = await this._db.Get(id);
-        if (result.Success)
+        if (result.Success && null != result.Data)
         {
             await this._cache.SetAsync(keyCache, CacheHelper.Encode(result.Data));
         }
@@ -107,5 +107,54 @@ public class CachedTopicRepository : CachedTopicRepositoryInterface
         }
 
         return updateResult;
+    }
+
+    public async Task<GetListTopicsResult> GetByGroupId(int groupId)
+    {
+        var result = new GetListTopicsResult();
+        if (groupId <= 0)
+        {
+            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "groupId");
+            return result;
+        }
+
+        var keyCache = GetGroupIdKeyCache(groupId);
+        var cachedData = await _cache.GetAsync(keyCache);
+
+        IEnumerable<int> listIds = new List<int>();
+        if (cachedData != null)
+        {
+            var listIdsFromCache = CacheHelper.Decode<List<int>>(cachedData);
+            if (null != listIdsFromCache && listIdsFromCache.Count() > 0)
+            {
+                listIds = listIdsFromCache;
+            }
+        }
+
+        if (listIds.Count() > 0)
+        {
+            var getListResults = await Task.WhenAll(listIds.Select(Get));
+
+            result.Success = true;
+            result.Message = "Get list topics by group id from cache succes";
+            result.Data = getListResults.Where(item => item.isHasData()).Select(item => item.Data).ToList();
+
+            return result;
+        }
+
+        result = await _db.GetByGroupId(groupId);
+        if (result.isHasData() && result.Data?.Count() > 0)
+        {
+            listIds = result.Data.Select(item => item.Id);
+            await _cache.SetAsync(keyCache, CacheHelper.Encode(listIds));
+            await Task.WhenAll(result.Data.Select(item => _cache.SetAsync(GetIdKeyCache(item.Id), CacheHelper.Encode(item))));
+        }
+
+        return result;
+    }
+
+    private string GetGroupIdKeyCache(int id)
+    {
+        return String.Format("{0}:GroupId:{1}", GROUP_CACHE, id);
     }
 }
