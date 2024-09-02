@@ -1,28 +1,30 @@
 using Core.Features.Topic.InterfaceAdapters;
 using Core.Features.Topic.Models;
 using Core.Features.Topic.UseCases;
-using Core.Features.Vocabulary.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace english_api_dotnet.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("topics")]
 public class TopicController : ControllerBase
 {
     private readonly CachedTopicRepositoryInterface db;
     private readonly GetListVocabulariesByTopicIdUseCase getListVocabulariesByTopicIdUseCase;
     private readonly UpdateTopicUseCase updateTopicUseCase;
+    private readonly GetTopicByIdUseCase getTopicByIdUseCase;
 
     public TopicController(
         CachedTopicRepositoryInterface db,
         GetListVocabulariesByTopicIdUseCase getListVocabulariesByTopicIdUseCase,
-        UpdateTopicUseCase updateTopicUseCase
+        UpdateTopicUseCase updateTopicUseCase,
+        GetTopicByIdUseCase getTopicByIdUseCase
     )
     {
         this.db = db;
         this.getListVocabulariesByTopicIdUseCase = getListVocabulariesByTopicIdUseCase;
         this.updateTopicUseCase = updateTopicUseCase;
+        this.getTopicByIdUseCase = getTopicByIdUseCase;
     }
 
     [HttpGet]
@@ -34,7 +36,7 @@ public class TopicController : ControllerBase
     [HttpGet("{id}")]
     public async Task<GetTopicResult> GetById(int id)
     {
-        return await this.db.Get(id);
+        return await getTopicByIdUseCase.Invoke(id);
     }
 
     [HttpGet("{id}/vocabularies")]

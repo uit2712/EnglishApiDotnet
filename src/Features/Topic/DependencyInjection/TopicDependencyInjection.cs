@@ -15,5 +15,6 @@ public class TopicDependencyInjection
 
         services.AddScoped<GetListVocabulariesByTopicIdUseCase, GetListVocabulariesByTopicIdUseCase>();
         services.AddScoped<UpdateTopicUseCase, UpdateTopicUseCase>();
+        services.AddScoped<GetTopicByIdUseCase, GetTopicByIdUseCase>();
     }
 }
