@@ -1,7 +1,10 @@
 services:
   db:
     container_name: db
-    image: mcr.microsoft.com/mssql/server
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    volumes:
+      - ./db:/var/opt/mssql/data
+    user: root
     environment:
       MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
       MSSQL_PASSWORD: ${MSSQL_SA_PASSWORD}
