@@ -1,4 +1,6 @@
 using Core.EnglishContext;
+using Core.Features.Topic.InterfaceAdapters;
+using Core.Features.Topic.Repositories;
 using Core.Features.Vocabulary.InterfaceAdapters;
 using Core.Features.Vocabulary.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<VocabularyRepositoryInterface, VocabularyRepository>();
 builder.Services.AddScoped<CachedVocabularyRepositoryInterface, CachedVocabularyRepository>();
+
+builder.Services.AddScoped<TopicRepositoryInterface, TopicRepository>();
+builder.Services.AddScoped<CachedTopicRepositoryInterface, CachedTopicRepository>();
 
 var app = builder.Build();
 
