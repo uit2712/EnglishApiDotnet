@@ -1,3 +1,4 @@
+using Core.Constants;
 using Core.Features.Vocabulary.InterfaceAdapters;
 using Core.Features.Vocabulary.Models;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,19 @@ public class VocabularyRepository : VocabularyRepositoryInterface
 
         result.Success = true;
         result.Message = "Get vocabulary by id success";
+        return result;
+    }
+
+    public async Task<GetListVocabulariesResult> GetByTopicId(long topicId) {
+        var result = new GetListVocabulariesResult();
+        if (topicId <= 0) {
+            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "topicId");
+            return result;
+        }
+
+        result.Success = true;
+        result.Data = await _context.Vocabularies.Where(item => item.TopicId == topicId).ToListAsync();
+        result.Message = "Get list vocabularies by topic id success";
         return result;
     }
 }

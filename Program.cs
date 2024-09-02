@@ -1,6 +1,7 @@
 using Core.EnglishContext;
 using Core.Features.Topic.InterfaceAdapters;
 using Core.Features.Topic.Repositories;
+using Core.Features.Topic.UseCases;
 using Core.Features.Vocabulary.InterfaceAdapters;
 using Core.Features.Vocabulary.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,8 @@ builder.Services.AddScoped<CachedVocabularyRepositoryInterface, CachedVocabulary
 
 builder.Services.AddScoped<TopicRepositoryInterface, TopicRepository>();
 builder.Services.AddScoped<CachedTopicRepositoryInterface, CachedTopicRepository>();
+
+builder.Services.AddScoped<GetListVocabulariesByTopicIdUseCase, GetListVocabulariesByTopicIdUseCase>();
 
 var app = builder.Build();
 

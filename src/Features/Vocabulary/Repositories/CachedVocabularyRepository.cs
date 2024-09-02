@@ -79,4 +79,8 @@ public class CachedVocabularyRepository : CachedVocabularyRepositoryInterface
     private string GetIdKeyCache(long id) {
         return String.Format("{0}:{1}", GROUP_CACHE, id);
     }
+
+    public async Task<GetListVocabulariesResult> GetByTopicId(long topicId) {
+        return await _db.GetByTopicId(topicId);
+    }
 }
