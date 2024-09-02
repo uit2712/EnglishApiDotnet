@@ -30,18 +30,12 @@ builder.Services.AddScoped<CachedVocabularyRepositoryInterface, CachedVocabulary
 TopicDependencyInjection.Init(builder.Services);
 GroupDependencyInjection.Init(builder.Services);
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(
-        name: MyAllowSpecificOrigins,
-        policy =>
-        {
-            policy.WithOrigins("http://0.0.0.0:8080")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+    });
 });
 
 var app = builder.Build();
@@ -55,10 +49,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles(); // 🔴 here it is
-app.UseRouting(); // 🔴 here it is
-
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors();
 
 app.UseAuthorization();
 
