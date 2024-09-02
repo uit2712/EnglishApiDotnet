@@ -1,4 +1,5 @@
 using Core.EnglishContext;
+using Core.Features.Group.DependencyInjection;
 using Core.Features.Topic.DependencyInjection;
 using Core.Features.Topic.InterfaceAdapters;
 using Core.Features.Topic.Repositories;
@@ -27,6 +28,7 @@ builder.Services.AddScoped<VocabularyRepositoryInterface, VocabularyRepository>(
 builder.Services.AddScoped<CachedVocabularyRepositoryInterface, CachedVocabularyRepository>();
 
 TopicDependencyInjection.Init(builder.Services);
+GroupDependencyInjection.Init(builder.Services);
 
 var app = builder.Build();
 
