@@ -1,4 +1,20 @@
 services:
+  api:
+    container_name: api
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    user: root
+    working_dir: /app
+    ports:
+      - 80:3456
+      - 443:3457
+    volumes:
+      - ..:/app
+    command: dotnet run
+    networks:
+      - dotnet-network
+    environment:
+      - ASPNETCORE_URLS="http://+:3456,https://+:3454"
+
   db:
     container_name: db
     image: mcr.microsoft.com/mssql/server:2019-latest
