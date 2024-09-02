@@ -22,7 +22,7 @@ public class CachedVocabularyRepository : CachedVocabularyRepositoryInterface
     public async Task<GetListVocabulariesResult> GetAll()
     {
         var result = new GetListVocabulariesResult();
-        var keyCache = this.GetAllKeyCache();
+        var keyCache = GetAllKeyCache();
         var cachedData = await _cache.GetAsync(keyCache);
 
         if (cachedData != null)
@@ -35,9 +35,9 @@ public class CachedVocabularyRepository : CachedVocabularyRepositoryInterface
             return result;
         }
 
-        result = await this._db.GetAll();
+        result = await _db.GetAll();
         if (result.Success) {
-            await this._cache.SetAsync(keyCache, CacheHelper.Encode(result.Data));
+            await _cache.SetAsync(keyCache, CacheHelper.Encode(result.Data));
         }
 
         return result;
@@ -55,7 +55,7 @@ public class CachedVocabularyRepository : CachedVocabularyRepositoryInterface
             return result;
         }
 
-        var keyCache = this.GetIdKeyCache(id);
+        var keyCache = GetIdKeyCache(id);
         var cachedData = await _cache.GetAsync(keyCache);
 
         if (cachedData != null)
@@ -68,9 +68,9 @@ public class CachedVocabularyRepository : CachedVocabularyRepositoryInterface
             return result;
         }
 
-        result = await this._db.Get(id);
+        result = await _db.Get(id);
         if (result.Success) {
-            await this._cache.SetAsync(keyCache, CacheHelper.Encode(result.Data));
+            await _cache.SetAsync(keyCache, CacheHelper.Encode(result.Data));
         }
 
         return result;
@@ -80,7 +80,47 @@ public class CachedVocabularyRepository : CachedVocabularyRepositoryInterface
         return String.Format("{0}:{1}", GROUP_CACHE, id);
     }
 
-    public async Task<GetListVocabulariesResult> GetByTopicId(long topicId) {
-        return await _db.GetByTopicId(topicId);
+    public async Task<GetListVocabulariesResult> GetByTopicId(int topicId) {
+        var result = new GetListVocabulariesResult();
+        if (topicId <= 0) {
+            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "topicId");
+            return result;
+        }
+
+        var keyCache = GetTopicIdKeyCache(topicId);
+        var cachedData = await _cache.GetAsync(keyCache);
+
+        IEnumerable<long> listIds = new List<long>();
+        if (cachedData != null)
+        {
+            var listIdsFromCache = CacheHelper.Decode<List<long>>(cachedData);
+            if (null != listIdsFromCache && listIdsFromCache.Count() > 0) {
+                listIds = listIdsFromCache;
+            }
+        }
+
+        if (listIds.Count() > 0)
+        {
+            var getListVocabulariesResults = await Task.WhenAll(listIds.Select(Get));
+
+            result.Success = true;
+            result.Message = "Get list vocabularies by topic id from cache succes";
+            result.Data = getListVocabulariesResults.Where(item => item.isHasData()).Select(item => item.Data).ToList();
+
+            return result;
+        }
+
+        result = await _db.GetByTopicId(topicId);
+        if (result.isHasData() && result.Data?.Count() > 0) {
+            listIds = result.Data.Select(item => item.Id);
+            await _cache.SetAsync(keyCache, CacheHelper.Encode(listIds));
+            await Task.WhenAll(result.Data.Select(item => _cache.SetAsync(GetIdKeyCache(item.Id), CacheHelper.Encode(item))));
+        }
+
+        return result;
+    }
+
+    private string GetTopicIdKeyCache(long id) {
+        return String.Format("{0}:TopicId:{1}", GROUP_CACHE, id);
     }
 }

@@ -9,17 +9,21 @@ public class GetListVocabulariesByTopicIdUseCase
     private CachedTopicRepositoryInterface _topic;
     private CachedVocabularyRepositoryInterface _voca;
 
-    public GetListVocabulariesByTopicIdUseCase(CachedVocabularyRepositoryInterface voca, CachedTopicRepositoryInterface topic)
+    public GetListVocabulariesByTopicIdUseCase(
+        CachedVocabularyRepositoryInterface voca,
+        CachedTopicRepositoryInterface topic)
     {
         _voca = voca;
         _topic = topic;
     }
 
-    public async Task<GetListVocabulariesByTopicIdResult> Invoke(int topicId) {
+    public async Task<GetListVocabulariesByTopicIdResult> Invoke(int topicId)
+    {
         var result = new GetListVocabulariesByTopicIdResult();
 
         var getTopicResult = await _topic.Get(topicId);
-        if (getTopicResult.isHasData() == false) {
+        if (getTopicResult.isHasData() == false)
+        {
             result.Message = getTopicResult.Message;
             return result;
         }
@@ -27,7 +31,8 @@ public class GetListVocabulariesByTopicIdUseCase
         result.Topic = getTopicResult.Data;
 
         var getListVocabulariesResult = await _voca.GetByTopicId(topicId);
-        if (getListVocabulariesResult.isHasData()) {
+        if (getListVocabulariesResult.isHasData())
+        {
             result.Success = true;
             result.Data = getListVocabulariesResult.Data;
             result.Message = getListVocabulariesResult.Message;
