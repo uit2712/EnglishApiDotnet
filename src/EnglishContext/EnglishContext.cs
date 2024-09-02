@@ -1,3 +1,4 @@
+using Core.Features.Topic.Entities;
 using Core.Features.Vocabulary.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,4 +12,5 @@ public class EnglishContext : DbContext
     }
 
     public DbSet<VocabularyEntity> Vocabularies { get; set; } = null!;
+    public DbSet<TopicEntity> Topics { get; set; } = null!;
 }
