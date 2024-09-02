@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace english_api_dotnet.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("vocabularies")]
 public class VocabularyController : ControllerBase
 {
     private readonly CachedVocabularyRepositoryInterface db;
