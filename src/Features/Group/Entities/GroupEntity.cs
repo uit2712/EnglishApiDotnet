@@ -11,4 +11,6 @@ public class GroupEntity
     [Required(ErrorMessage = "Name is required")]
     [JsonProperty]
     public string Name { get; set; }
+    [JsonProperty]
+    public string? FontAwesomeIcon { get; set; }
 }
