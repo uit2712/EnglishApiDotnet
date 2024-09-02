@@ -9,7 +9,7 @@ services:
       - 443:3457
     volumes:
       - ..:/app
-    command: dotnet run
+    command: dotnet watch --project english-api-dotnet.csproj run
     networks:
       - dotnet-network
     environment:
@@ -69,4 +69,7 @@ services:
 
 networks:
   dotnet-network:
+
+volumes:
+  sln_file:
     
