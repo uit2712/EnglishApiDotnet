@@ -12,5 +12,6 @@ public class GroupDependencyInjection
         services.AddScoped<CachedGroupRepositoryInterface, CachedGroupRepository>();
 
         services.AddScoped<GetAllGroupsUseCase, GetAllGroupsUseCase>();
+        services.AddScoped<GetGroupByIdUseCase, GetGroupByIdUseCase>();
     }
 }
