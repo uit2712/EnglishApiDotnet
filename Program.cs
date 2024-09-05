@@ -24,7 +24,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IEnglishContext, EnglishContext>();
+builder.Services.AddScoped<IEnglishContext, EnglishContext>();
 
 builder.Services.AddScoped<VocabularyRepositoryInterface, VocabularyRepository>();
 builder.Services.AddScoped<CachedVocabularyRepositoryInterface, CachedVocabularyRepository>();
