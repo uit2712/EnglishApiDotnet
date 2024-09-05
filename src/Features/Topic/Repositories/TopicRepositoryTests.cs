@@ -39,7 +39,7 @@ public class TopicRepositoryTests
     [Theory]
     [InlineData(-1)]
     [InlineData(0)]
-    public async void Get_Invalid_Id(int id)
+    public async Task Get_Invalid_Id(int id)
     {
         var mockRepo = new Mock<TopicRepositoryInterface>();
         mockRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetTopicResult
@@ -60,7 +60,7 @@ public class TopicRepositoryTests
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
-    public async void Get_Success(int id)
+    public async Task Get_Success(int id)
     {
         var mockRepo = new Mock<TopicRepositoryInterface>();
         mockRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetTopicResult
@@ -84,7 +84,7 @@ public class TopicRepositoryTests
     [Theory]
     [InlineData(99)]
     [InlineData(100)]
-    public async void Get_Failed_Not_Found_Any_Item(int id)
+    public async Task Get_Failed_Not_Found_Any_Item(int id)
     {
         var mockRepo = new Mock<TopicRepositoryInterface>();
         mockRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetTopicResult
@@ -107,7 +107,7 @@ public class TopicRepositoryTests
     [Theory]
     [InlineData(-1)]
     [InlineData(0)]
-    public async void GetByGroupId_InvalidId(int groupId)
+    public async Task GetByGroupId_InvalidId(int groupId)
     {
         var mockRepo = new Mock<TopicRepositoryInterface>();
         mockRepo.Setup(c => c.GetByGroupId(groupId)).Returns(Task.FromResult(new GetListTopicsResult
@@ -128,7 +128,7 @@ public class TopicRepositoryTests
     [Theory]
     [InlineData(3)]
     [InlineData(4)]
-    public async void GetByGroupId_NotFoundItem(int groupId)
+    public async Task GetByGroupId_NotFoundItem(int groupId)
     {
         var mockRepo = new Mock<TopicRepositoryInterface>();
         mockRepo.Setup(c => c.GetByGroupId(groupId)).Returns(Task.FromResult(new GetListTopicsResult
@@ -150,7 +150,7 @@ public class TopicRepositoryTests
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
-    public async void GetByGroupId_Success(int groupId)
+    public async Task GetByGroupId_Success(int groupId)
     {
         var mockRepo = new Mock<TopicRepositoryInterface>();
         mockRepo.Setup(c => c.GetByGroupId(groupId)).Returns(Task.FromResult(new GetListTopicsResult

@@ -80,7 +80,7 @@ public class CachedVocabularyRepository : CachedVocabularyRepositoryInterface
         return result;
     }
 
-    private string GetIdKeyCache(long id)
+    public string GetIdKeyCache(long id)
     {
         return string.Format("{0}:{1}", GROUP_CACHE, id);
     }

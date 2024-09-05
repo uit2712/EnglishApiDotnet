@@ -36,7 +36,7 @@ public class GroupRepositoryTests
     [Theory]
     [InlineData(-1)]
     [InlineData(0)]
-    public async void Get_Invalid_Id(int id)
+    public async Task Get_Invalid_Id(int id)
     {
         var mockContext = GetMockContext();
         var repo = GetRepo(mockContext.Object);
@@ -55,7 +55,7 @@ public class GroupRepositoryTests
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
-    public async void Get_Success(int id)
+    public async Task Get_Success(int id)
     {
         var mockContext = GetMockContext();
         var repo = GetRepo(mockContext.Object);
@@ -77,7 +77,7 @@ public class GroupRepositoryTests
     [Theory]
     [InlineData(3)]
     [InlineData(4)]
-    public async void Get_Failed_Not_Found_Any_Item(int id)
+    public async Task Get_Failed_Not_Found_Any_Item(int id)
     {
         var mockContext = GetMockContext();
         var repo = GetRepo(mockContext.Object);

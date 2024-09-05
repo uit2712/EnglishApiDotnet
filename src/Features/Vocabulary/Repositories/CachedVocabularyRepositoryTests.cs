@@ -1,9 +1,9 @@
 using Core.Constants;
 using Core.EnglishContext;
-using Core.Features.Group.Entities;
-using Core.Features.Group.InterfaceAdapters;
-using Core.Features.Group.Models;
-using Core.Features.Group.Repositories;
+using Core.Features.Vocabulary.Entities;
+using Core.Features.Vocabulary.InterfaceAdapters;
+using Core.Features.Vocabulary.Models;
+using Core.Features.Vocabulary.Repositories;
 using Core.Helpers;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
@@ -14,39 +14,44 @@ using Xunit;
 
 namespace Core.UnitTests;
 
-public class CachedGroupRepositoryTests
+public class CachedVocabularyRepositoryTests
 {
-    private IEnumerable<GroupEntity> data = new List<GroupEntity>
+    private string _itemName = "vocabulary";
+    private IEnumerable<VocabularyEntity> _data = new List<VocabularyEntity>
     {
-        new GroupEntity { Id=1, Name = "Group 1" },
-        new GroupEntity { Id=2, Name = "Group 2" },
+        new VocabularyEntity { Id=1, Name="Vocabulary 1", Pronunciation="Pronunciation 1", Meaning="Meaning 1", TopicId=1 },
+        new VocabularyEntity { Id=2, Name="Vocabulary 2", Pronunciation="Pronunciation 2", Meaning="Meaning 2", TopicId=1 },
+        new VocabularyEntity { Id=3, Name="Vocabulary 3", Pronunciation="Pronunciation 3", Meaning="Meaning 3", TopicId=1 },
+        new VocabularyEntity { Id=4, Name="Vocabulary 4", Pronunciation="Pronunciation 4", Meaning="Meaning 4", TopicId=1 },
+        new VocabularyEntity { Id=5, Name="Vocabulary 5", Pronunciation="Pronunciation 5", Meaning="Meaning 5", TopicId=2 },
+        new VocabularyEntity { Id=6, Name="Vocabulary 6", Pronunciation="Pronunciation 6", Meaning="Meaning 6", TopicId=2 },
     };
 
     protected Mock<IEnglishContext> GetMockContext()
     {
         var mockContext = new Mock<IEnglishContext>();
-        mockContext.Setup(c => c.Groups).ReturnsDbSet(data);
+        mockContext.Setup(c => c.Vocabularies).ReturnsDbSet(_data);
 
         return mockContext;
     }
 
-    protected GroupRepositoryInterface GetRepo(IEnglishContext context)
+    protected VocabularyRepositoryInterface GetRepo(IEnglishContext context)
     {
-        var repo = new GroupRepository(context);
+        var repo = new VocabularyRepository(context);
 
         return repo;
     }
 
-    protected Mock<GroupRepositoryInterface> GetMockRepo()
+    protected Mock<VocabularyRepositoryInterface> GetMockRepo()
     {
-        var repo = new Mock<GroupRepositoryInterface>();
+        var repo = new Mock<VocabularyRepositoryInterface>();
 
         return repo;
     }
 
-    protected CachedGroupRepositoryInterface GetCachedRepo(GroupRepositoryInterface db, IDistributedCache cache)
+    protected CachedVocabularyRepositoryInterface GetCachedRepo(VocabularyRepositoryInterface db, IDistributedCache cache)
     {
-        var repo = new CachedGroupRepository(db, cache);
+        var repo = new CachedVocabularyRepository(db, cache);
 
         return repo;
     }
@@ -64,8 +69,8 @@ public class CachedGroupRepositoryTests
     {
         var cache = GetCache();
 
-        var mockCachedRepo = new Mock<CachedGroupRepositoryInterface>();
-        mockCachedRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetGroupResult
+        var mockCachedRepo = new Mock<CachedVocabularyRepositoryInterface>();
+        mockCachedRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetVocabularyResult
         {
             Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id"),
         }));
@@ -80,8 +85,8 @@ public class CachedGroupRepositoryTests
     }
 
     [Theory]
-    [InlineData(3)]
-    [InlineData(4)]
+    [InlineData(99)]
+    [InlineData(100)]
     public async Task Get_Not_Found_Item(int id)
     {
         var mockContext = GetMockContext();
@@ -89,10 +94,10 @@ public class CachedGroupRepositoryTests
 
         var cache = GetCache();
 
-        var mockCachedRepo = new Mock<CachedGroupRepositoryInterface>();
-        mockCachedRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetGroupResult
+        var mockCachedRepo = new Mock<CachedVocabularyRepositoryInterface>();
+        mockCachedRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetVocabularyResult
         {
-            Message = string.Format(ErrorMessage.NOT_FOUND_ITEM, "group"),
+            Message = string.Format(ErrorMessage.NOT_FOUND_ITEM, _itemName),
         }));
         var expectedResult = await mockCachedRepo.Object.Get(id);
 
@@ -114,19 +119,19 @@ public class CachedGroupRepositoryTests
 
         var cache = GetCache();
 
-        var mockCachedRepo = new Mock<CachedGroupRepositoryInterface>();
-        mockCachedRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetGroupResult
+        var mockCachedRepo = new Mock<CachedVocabularyRepositoryInterface>();
+        mockCachedRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetVocabularyResult
         {
             Success = true,
-            Data = data.FirstOrDefault(item => item.Id == id),
-            Message = string.Format(SuccessMessage.FOUND_ITEM, "group"),
+            Data = _data.FirstOrDefault(item => item.Id == id),
+            Message = string.Format(SuccessMessage.FOUND_ITEM, _itemName),
         }));
         var expectedResult = await mockCachedRepo.Object.Get(id);
 
         var actualRepo = GetCachedRepo(repo, cache);
         var actualResult = await actualRepo.Get(id);
         var actualCacheResult = await cache.GetAsync(actualRepo.GetIdKeyCache(id));
-        var actualDecodedCacheResult = CacheHelper.Decode<GroupEntity>(actualCacheResult);
+        var actualDecodedCacheResult = CacheHelper.Decode<VocabularyEntity>(actualCacheResult);
 
         Assert.True(actualResult.Success);
         Assert.Equal(actualResult.Success, expectedResult.Success);

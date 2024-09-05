@@ -42,7 +42,7 @@ public class VocabularyRepositoryTests
     [Theory]
     [InlineData(-1)]
     [InlineData(0)]
-    public async void Get_Invalid_Id(int id)
+    public async Task Get_Invalid_Id(int id)
     {
         var mockRepo = new Mock<VocabularyRepositoryInterface>();
         mockRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetVocabularyResult
@@ -63,7 +63,7 @@ public class VocabularyRepositoryTests
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
-    public async void Get_Success(int id)
+    public async Task Get_Success(int id)
     {
         var mockRepo = new Mock<VocabularyRepositoryInterface>();
         mockRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetVocabularyResult
@@ -87,7 +87,7 @@ public class VocabularyRepositoryTests
     [Theory]
     [InlineData(99)]
     [InlineData(100)]
-    public async void Get_Failed_Not_Found_Any_Item(int id)
+    public async Task Get_Failed_Not_Found_Any_Item(int id)
     {
         var mockRepo = new Mock<VocabularyRepositoryInterface>();
         mockRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetVocabularyResult
@@ -110,7 +110,7 @@ public class VocabularyRepositoryTests
     [Theory]
     [InlineData(-1)]
     [InlineData(0)]
-    public async void GetByTopicId_InvalidId(int topicId)
+    public async Task GetByTopicId_InvalidId(int topicId)
     {
         var mockRepo = new Mock<VocabularyRepositoryInterface>();
         mockRepo.Setup(c => c.GetByTopicId(topicId)).Returns(Task.FromResult(new GetListVocabulariesResult
@@ -131,7 +131,7 @@ public class VocabularyRepositoryTests
     [Theory]
     [InlineData(3)]
     [InlineData(4)]
-    public async void GetByTopicId_NotFoundItem(int topicId)
+    public async Task GetByTopicId_NotFoundItem(int topicId)
     {
         var mockRepo = new Mock<VocabularyRepositoryInterface>();
         mockRepo.Setup(c => c.GetByTopicId(topicId)).Returns(Task.FromResult(new GetListVocabulariesResult
@@ -153,7 +153,7 @@ public class VocabularyRepositoryTests
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
-    public async void GetByTopicId_Success(int topicId)
+    public async Task GetByTopicId_Success(int topicId)
     {
         var mockRepo = new Mock<VocabularyRepositoryInterface>();
         mockRepo.Setup(c => c.GetByTopicId(topicId)).Returns(Task.FromResult(new GetListVocabulariesResult
