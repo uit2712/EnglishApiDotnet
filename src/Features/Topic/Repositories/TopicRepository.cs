@@ -9,6 +9,7 @@ namespace Core.Features.Topic.Repositories;
 public class TopicRepository : TopicRepositoryInterface
 {
     private IEnglishContext _context;
+    private string _itemName = "topic";
 
     public TopicRepository(IEnglishContext context)
     {
@@ -44,12 +45,12 @@ public class TopicRepository : TopicRepositoryInterface
         result.Data = await _context.Topics.FirstOrDefaultAsync(item => item.Id == id);
         if (null == result.Data)
         {
-            result.Message = "Get Topic by id failed";
+            result.Message = string.Format(ErrorMessage.NOT_FOUND_ITEM, _itemName);
             return result;
         }
 
         result.Success = true;
-        result.Message = "Get Topic by id success";
+        result.Message = string.Format(SuccessMessage.FOUND_ITEM, _itemName);
         return result;
     }
 
