@@ -4,6 +4,7 @@ using Core.Features.Group.Entities;
 using Core.Features.Group.InterfaceAdapters;
 using Core.Features.Group.Models;
 using Core.Features.Group.Repositories;
+using Core.Helpers;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -50,7 +51,7 @@ public class CachedGroupRepositoryTests
         return repo;
     }
 
-    public IDistributedCache MockCache()
+    public IDistributedCache GetCache()
     {
         var opts = Options.Create(new MemoryDistributedCacheOptions());
         return new MemoryDistributedCache(opts);
@@ -61,7 +62,7 @@ public class CachedGroupRepositoryTests
     [InlineData(0)]
     public async void Get_Invalid_Id(int id)
     {
-        var mockCache = MockCache();
+        var cache = GetCache();
 
         var mockCachedRepo = new Mock<CachedGroupRepositoryInterface>();
         mockCachedRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetGroupResult
@@ -70,7 +71,7 @@ public class CachedGroupRepositoryTests
         }));
         var expectedResult = await mockCachedRepo.Object.Get(id);
 
-        var actualRepo = GetCachedRepo(GetMockRepo().Object, mockCache);
+        var actualRepo = GetCachedRepo(GetMockRepo().Object, cache);
         var actualResult = await actualRepo.Get(id);
 
         Assert.False(actualResult.Success);
@@ -86,7 +87,7 @@ public class CachedGroupRepositoryTests
         var mockContext = MockContext();
         var repo = GetRepo(mockContext.Object);
 
-        var mockCache = MockCache();
+        var cache = GetCache();
 
         var mockCachedRepo = new Mock<CachedGroupRepositoryInterface>();
         mockCachedRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetGroupResult
@@ -95,11 +96,42 @@ public class CachedGroupRepositoryTests
         }));
         var expectedResult = await mockCachedRepo.Object.Get(id);
 
-        var actualRepo = GetCachedRepo(repo, mockCache);
+        var actualRepo = GetCachedRepo(repo, cache);
         var actualResult = await actualRepo.Get(id);
 
         Assert.False(actualResult.Success);
         Assert.Equal(actualResult.Success, expectedResult.Success);
         Assert.Equal(actualResult.Message, expectedResult.Message);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async void Get_Success(int id)
+    {
+        var mockContext = MockContext();
+        var repo = GetRepo(mockContext.Object);
+
+        var cache = GetCache();
+
+        var mockCachedRepo = new Mock<CachedGroupRepositoryInterface>();
+        mockCachedRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetGroupResult
+        {
+            Success = true,
+            Data = data.FirstOrDefault(item => item.Id == id),
+            Message = string.Format(SuccessMessage.FOUND_ITEM, "group"),
+        }));
+        var expectedResult = await mockCachedRepo.Object.Get(id);
+
+        var actualRepo = GetCachedRepo(repo, cache);
+        var actualResult = await actualRepo.Get(id);
+        var actualCacheResult = await cache.GetAsync(actualRepo.GetIdKeyCache(id));
+        var actualDecodedCacheResult = CacheHelper.Decode<GroupEntity>(actualCacheResult);
+
+        Assert.True(actualResult.Success);
+        Assert.Equal(actualResult.Success, expectedResult.Success);
+        Assert.Equal(actualResult.Message, expectedResult.Message);
+        Assert.Equal(JsonHelper.Encode(actualResult.Data), JsonHelper.Encode(expectedResult.Data));
+        Assert.Equal(JsonHelper.Encode(actualResult.Data), JsonHelper.Encode(actualDecodedCacheResult));
     }
 }

@@ -40,7 +40,7 @@ public class GroupRepository : GroupRepositoryInterface
         result.Success = null != result.Data;
         if (result.Success)
         {
-            result.Message = string.Format(ErrorMessage.FOUND_ITEM, "group");
+            result.Message = string.Format(SuccessMessage.FOUND_ITEM, "group");
         }
         else
         {

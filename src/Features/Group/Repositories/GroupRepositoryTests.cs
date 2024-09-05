@@ -62,7 +62,7 @@ public class GroupRepositoryTests
         {
             Success = true,
             Data = data.FirstOrDefault(item => item.Id == id),
-            Message = string.Format(ErrorMessage.FOUND_ITEM, "group")
+            Message = string.Format(SuccessMessage.FOUND_ITEM, "group")
         };
         var actualResult = await mockRepo.Get(id);
 
