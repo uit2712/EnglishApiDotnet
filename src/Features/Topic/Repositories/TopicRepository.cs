@@ -96,7 +96,7 @@ public class TopicRepository : TopicRepositoryInterface
         result.Success = result.Data.Count() > 0;
         if (result.Success)
         {
-            result.Message = "Get list topics by group id success";
+            result.Message = string.Format(SuccessMessage.FOUND_LIST_ITEMS, _itemName);
         }
         else
         {

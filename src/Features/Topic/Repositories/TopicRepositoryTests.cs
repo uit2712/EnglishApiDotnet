@@ -7,6 +7,7 @@ using Core.Features.Topic.Entities;
 using Core.Features.Topic.InterfaceAdapters;
 using Core.Features.Topic.Repositories;
 using Core.Features.Topic.Models;
+using Core.Helpers;
 
 namespace Core.UnitTests;
 
@@ -144,5 +145,29 @@ public class TopicRepositoryTests
         Assert.Equal(expectedResult.Success, actualResult.Success);
         Assert.Equal(expectedResult.Message, actualResult.Message);
         Assert.Equal(expectedResult.Data, actualResult.Data);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async void GetByGroupId_Success(int groupId)
+    {
+        var mockRepo = new Mock<TopicRepositoryInterface>();
+        mockRepo.Setup(c => c.GetByGroupId(groupId)).Returns(Task.FromResult(new GetListTopicsResult
+        {
+            Success = true,
+            Message = string.Format(SuccessMessage.FOUND_LIST_ITEMS, _itemName),
+            Data = _data.Where(item => item.GroupId == groupId),
+        }));
+        var expectedResult = await mockRepo.Object.GetByGroupId(groupId);
+
+        var mockContext = GetMockContext();
+        var repo = GetRepo(mockContext.Object);
+        var actualResult = await repo.GetByGroupId(groupId);
+
+        Assert.True(actualResult.Success);
+        Assert.Equal(expectedResult.Success, actualResult.Success);
+        Assert.Equal(expectedResult.Message, actualResult.Message);
+        Assert.Equal(JsonHelper.Encode(expectedResult.Data), JsonHelper.Encode(actualResult.Data));
     }
 }
