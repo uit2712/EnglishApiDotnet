@@ -17,6 +17,7 @@ public class TopicRepositoryTests
     {
         new TopicEntity { Id=1, Name="Topic 1", GroupId=1 },
         new TopicEntity { Id=2, Name="Topic 2", GroupId=1 },
+        new TopicEntity { Id=3, Name="Topic 3", GroupId=2 },
     };
 
     protected Mock<IEnglishContext> GetMockContext()
@@ -39,13 +40,15 @@ public class TopicRepositoryTests
     [InlineData(0)]
     public async void Get_Invalid_Id(int id)
     {
-        var mockContext = GetMockContext();
-        var repo = GetRepo(mockContext.Object);
-
-        var expectedResult = new GetTopicResult
+        var mockRepo = new Mock<TopicRepositoryInterface>();
+        mockRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetTopicResult
         {
             Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id")
-        };
+        }));
+        var expectedResult = await mockRepo.Object.Get(id);
+
+        var mockContext = GetMockContext();
+        var repo = GetRepo(mockContext.Object);
         var actualResult = await repo.Get(id);
 
         Assert.False(actualResult.Success);
@@ -58,15 +61,17 @@ public class TopicRepositoryTests
     [InlineData(2)]
     public async void Get_Success(int id)
     {
-        var mockContext = GetMockContext();
-        var repo = GetRepo(mockContext.Object);
-
-        var expectedResult = new GetTopicResult
+        var mockRepo = new Mock<TopicRepositoryInterface>();
+        mockRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetTopicResult
         {
             Success = true,
             Data = _data.FirstOrDefault(item => item.Id == id),
             Message = string.Format(SuccessMessage.FOUND_ITEM, _itemName)
-        };
+        }));
+        var expectedResult = await mockRepo.Object.Get(id);
+
+        var mockContext = GetMockContext();
+        var repo = GetRepo(mockContext.Object);
         var actualResult = await repo.Get(id);
 
         Assert.True(actualResult.Success);
@@ -76,18 +81,20 @@ public class TopicRepositoryTests
     }
 
     [Theory]
-    [InlineData(3)]
-    [InlineData(4)]
+    [InlineData(99)]
+    [InlineData(100)]
     public async void Get_Failed_Not_Found_Any_Item(int id)
     {
-        var mockContext = GetMockContext();
-        var repo = GetRepo(mockContext.Object);
-
-        var expectedResult = new GetTopicResult
+        var mockRepo = new Mock<TopicRepositoryInterface>();
+        mockRepo.Setup(c => c.Get(id)).Returns(Task.FromResult(new GetTopicResult
         {
             Data = _data.FirstOrDefault(item => item.Id == id),
             Message = string.Format(ErrorMessage.NOT_FOUND_ITEM, _itemName),
-        };
+        }));
+        var expectedResult = await mockRepo.Object.Get(id);
+
+        var mockContext = GetMockContext();
+        var repo = GetRepo(mockContext.Object);
         var actualResult = await repo.Get(id);
 
         Assert.False(actualResult.Success);
@@ -101,17 +108,41 @@ public class TopicRepositoryTests
     [InlineData(0)]
     public async void GetByGroupId_InvalidId(int groupId)
     {
-        var mockContext = GetMockContext();
-        var repo = GetRepo(mockContext.Object);
-
-        var expectedResult = new GetListTopicsResult
+        var mockRepo = new Mock<TopicRepositoryInterface>();
+        mockRepo.Setup(c => c.GetByGroupId(groupId)).Returns(Task.FromResult(new GetListTopicsResult
         {
             Message = string.Format(ErrorMessage.INVALID_PARAMETER, "groupId")
-        };
+        }));
+        var expectedResult = await mockRepo.Object.GetByGroupId(groupId);
+
+        var mockContext = GetMockContext();
+        var repo = GetRepo(mockContext.Object);
         var actualResult = await repo.GetByGroupId(groupId);
 
         Assert.False(actualResult.Success);
         Assert.Equal(expectedResult.Success, actualResult.Success);
         Assert.Equal(expectedResult.Message, actualResult.Message);
+    }
+
+    [Theory]
+    [InlineData(3)]
+    [InlineData(4)]
+    public async void GetByGroupId_NotFoundItem(int groupId)
+    {
+        var mockRepo = new Mock<TopicRepositoryInterface>();
+        mockRepo.Setup(c => c.GetByGroupId(groupId)).Returns(Task.FromResult(new GetListTopicsResult
+        {
+            Message = string.Format(ErrorMessage.NOT_FOUND_ITEM, _itemName)
+        }));
+        var expectedResult = await mockRepo.Object.GetByGroupId(groupId);
+
+        var mockContext = GetMockContext();
+        var repo = GetRepo(mockContext.Object);
+        var actualResult = await repo.GetByGroupId(groupId);
+
+        Assert.False(actualResult.Success);
+        Assert.Equal(expectedResult.Success, actualResult.Success);
+        Assert.Equal(expectedResult.Message, actualResult.Message);
+        Assert.Equal(expectedResult.Data, actualResult.Data);
     }
 }

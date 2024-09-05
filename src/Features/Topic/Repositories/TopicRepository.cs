@@ -92,9 +92,16 @@ public class TopicRepository : TopicRepositoryInterface
             return result;
         }
 
-        result.Success = true;
         result.Data = await _context.Topics.Where(item => item.GroupId == groupId).ToListAsync();
-        result.Message = "Get list topics by group id success";
+        result.Success = result.Data.Count() > 0;
+        if (result.Success)
+        {
+            result.Message = "Get list topics by group id success";
+        }
+        else
+        {
+            result.Message = string.Format(ErrorMessage.NOT_FOUND_ITEM, _itemName);
+        }
         return result;
     }
 }
