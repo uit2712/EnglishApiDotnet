@@ -40,11 +40,11 @@ public class GroupRepository : GroupRepositoryInterface
         result.Success = null != result.Data;
         if (result.Success)
         {
-            result.Message = "Get group by id success";
+            result.Message = string.Format(ErrorMessage.FOUND_ITEM, "group");
         }
         else
         {
-            result.Message = "Get group by id failed: Not found group";
+            result.Message = string.Format(ErrorMessage.NOT_FOUND_ITEM, "group");
         }
 
         return result;
