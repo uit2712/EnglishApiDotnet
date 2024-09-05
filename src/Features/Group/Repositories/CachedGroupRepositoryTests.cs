@@ -22,7 +22,7 @@ public class CachedGroupRepositoryTests
         new GroupEntity { Id=2, Name = "Group 2" },
     };
 
-    protected Mock<IEnglishContext> MockContext()
+    protected Mock<IEnglishContext> GetMockContext()
     {
         var mockContext = new Mock<IEnglishContext>();
         mockContext.Setup(c => c.Groups).ReturnsDbSet(data);
@@ -84,7 +84,7 @@ public class CachedGroupRepositoryTests
     [InlineData(4)]
     public async void Get_Not_Found_Item(int id)
     {
-        var mockContext = MockContext();
+        var mockContext = GetMockContext();
         var repo = GetRepo(mockContext.Object);
 
         var cache = GetCache();
@@ -109,7 +109,7 @@ public class CachedGroupRepositoryTests
     [InlineData(2)]
     public async void Get_Success(int id)
     {
-        var mockContext = MockContext();
+        var mockContext = GetMockContext();
         var repo = GetRepo(mockContext.Object);
 
         var cache = GetCache();

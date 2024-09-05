@@ -18,7 +18,7 @@ public class GroupRepositoryTests
         new GroupEntity { Id=2, Name = "Group 2" },
     };
 
-    protected Mock<IEnglishContext> MockContext()
+    protected Mock<IEnglishContext> GetMockContext()
     {
         var mockContext = new Mock<IEnglishContext>();
         mockContext.Setup(c => c.Groups).ReturnsDbSet(data);
@@ -26,9 +26,9 @@ public class GroupRepositoryTests
         return mockContext;
     }
 
-    protected GroupRepositoryInterface MockRepo()
+    protected GroupRepositoryInterface GetRepo(IEnglishContext context)
     {
-        var repo = new GroupRepository(MockContext().Object);
+        var repo = new GroupRepository(context);
 
         return repo;
     }
@@ -38,13 +38,14 @@ public class GroupRepositoryTests
     [InlineData(0)]
     public async void Get_Invalid_Id(int id)
     {
-        var mockRepo = MockRepo();
+        var mockContext = GetMockContext();
+        var repo = GetRepo(mockContext.Object);
 
         var expectedResult = new GetGroupResult
         {
             Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id")
         };
-        var actualResult = await mockRepo.Get(id);
+        var actualResult = await repo.Get(id);
 
         Assert.False(actualResult.Success);
         Assert.Equal(expectedResult.Success, actualResult.Success);
@@ -56,7 +57,8 @@ public class GroupRepositoryTests
     [InlineData(2)]
     public async void Get_Success(int id)
     {
-        var mockRepo = MockRepo();
+        var mockContext = GetMockContext();
+        var repo = GetRepo(mockContext.Object);
 
         var expectedResult = new GetGroupResult
         {
@@ -64,7 +66,7 @@ public class GroupRepositoryTests
             Data = data.FirstOrDefault(item => item.Id == id),
             Message = string.Format(SuccessMessage.FOUND_ITEM, "group")
         };
-        var actualResult = await mockRepo.Get(id);
+        var actualResult = await repo.Get(id);
 
         Assert.True(actualResult.Success);
         Assert.Equal(expectedResult.Success, actualResult.Success);
@@ -77,13 +79,14 @@ public class GroupRepositoryTests
     [InlineData(4)]
     public async void Get_Failed_Not_Found_Any_Item(int id)
     {
-        var mockRepo = MockRepo();
+        var mockContext = GetMockContext();
+        var repo = GetRepo(mockContext.Object);
 
         var expectedResult = new GetGroupResult
         {
             Data = data.FirstOrDefault(item => item.Id == id)
         };
-        var actualResult = await mockRepo.Get(id);
+        var actualResult = await repo.Get(id);
 
         Assert.False(actualResult.Success);
         Assert.Equal(expectedResult.Success, actualResult.Success);
