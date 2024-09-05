@@ -95,4 +95,23 @@ public class TopicRepositoryTests
         Assert.Equal(expectedResult.Message, actualResult.Message);
         Assert.Equal(expectedResult.Data, actualResult.Data);
     }
+
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    public async void GetByGroupId_InvalidId(int groupId)
+    {
+        var mockContext = GetMockContext();
+        var repo = GetRepo(mockContext.Object);
+
+        var expectedResult = new GetListTopicsResult
+        {
+            Message = string.Format(ErrorMessage.INVALID_PARAMETER, "groupId")
+        };
+        var actualResult = await repo.GetByGroupId(groupId);
+
+        Assert.False(actualResult.Success);
+        Assert.Equal(expectedResult.Success, actualResult.Success);
+        Assert.Equal(expectedResult.Message, actualResult.Message);
+    }
 }
