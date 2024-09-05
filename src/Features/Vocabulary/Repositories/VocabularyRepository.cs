@@ -9,6 +9,7 @@ namespace Core.Features.Vocabulary.Repositories;
 public class VocabularyRepository : VocabularyRepositoryInterface
 {
     private IEnglishContext _context;
+    private string _itemName = "vocabulary";
 
     public VocabularyRepository(IEnglishContext context)
     {
@@ -19,7 +20,7 @@ public class VocabularyRepository : VocabularyRepositoryInterface
     {
         var result = new GetListVocabulariesResult
         {
-            Data = await this._context.Vocabularies.ToListAsync()
+            Data = await _context.Vocabularies.ToListAsync()
         };
         if (null == result.Data)
         {
@@ -34,18 +35,22 @@ public class VocabularyRepository : VocabularyRepositoryInterface
 
     public async Task<GetVocabularyResult> Get(long id)
     {
-        var result = new GetVocabularyResult
+        var result = new GetVocabularyResult();
+        if (id <= 0)
         {
-            Data = await this._context.Vocabularies.FirstOrDefaultAsync(item => item.Id == id)
-        };
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id");
+            return result;
+        }
+
+        result.Data = await _context.Vocabularies.FirstOrDefaultAsync(item => item.Id == id);
         if (null == result.Data)
         {
-            result.Message = "Get vocabulary by id failed";
+            result.Message = string.Format(ErrorMessage.NOT_FOUND_ITEM, _itemName);
             return result;
         }
 
         result.Success = true;
-        result.Message = "Get vocabulary by id success";
+        result.Message = string.Format(SuccessMessage.FOUND_ITEM, _itemName);
         return result;
     }
 
@@ -58,9 +63,16 @@ public class VocabularyRepository : VocabularyRepositoryInterface
             return result;
         }
 
-        result.Success = true;
         result.Data = await _context.Vocabularies.Where(item => item.TopicId == topicId).ToListAsync();
-        result.Message = "Get list vocabularies by topic id success";
+        result.Success = result.Data.Count() > 0;
+        if (result.Success)
+        {
+            result.Message = string.Format(SuccessMessage.FOUND_LIST_ITEMS, _itemName);
+        }
+        else
+        {
+            result.Message = string.Format(ErrorMessage.NOT_FOUND_ITEM, _itemName);
+        }
         return result;
     }
 }

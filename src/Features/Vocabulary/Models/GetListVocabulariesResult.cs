@@ -5,4 +5,8 @@ namespace Core.Features.Vocabulary.Models;
 
 public class GetListVocabulariesResult : Result<IEnumerable<VocabularyEntity>>
 {
+    public GetListVocabulariesResult()
+    {
+        this.Data = [];
+    }
 }
