@@ -54,7 +54,7 @@ public class VocabularyRepository : VocabularyRepositoryInterface
         var result = new GetListVocabulariesResult();
         if (topicId <= 0)
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "topicId");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "topicId");
             return result;
         }
 

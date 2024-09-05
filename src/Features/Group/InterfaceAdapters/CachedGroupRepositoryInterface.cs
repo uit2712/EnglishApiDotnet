@@ -8,5 +8,6 @@ public interface CachedGroupRepositoryInterface
 {
     public Task<GetListGroupsResult> GetAll();
     public Task<GetGroupResult> Get(int id);
+    public string GetIdKeyCache(int id);
     public Task<GetGroupResult> Update(GroupEntity data);
 }

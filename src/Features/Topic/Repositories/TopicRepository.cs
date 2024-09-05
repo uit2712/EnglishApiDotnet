@@ -37,7 +37,7 @@ public class TopicRepository : TopicRepositoryInterface
         var result = new GetTopicResult();
         if (id <= 0)
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "id");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id");
             return result;
         }
 
@@ -58,13 +58,13 @@ public class TopicRepository : TopicRepositoryInterface
         var result = new GetTopicResult();
         if (id <= 0)
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "id");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id");
             return result;
         }
 
-        if (String.IsNullOrEmpty(name))
+        if (string.IsNullOrEmpty(name))
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "name");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "name");
             return result;
         }
 
@@ -87,7 +87,7 @@ public class TopicRepository : TopicRepositoryInterface
         var result = new GetListTopicsResult();
         if (groupId <= 0)
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "groupId");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "groupId");
             return result;
         }
 

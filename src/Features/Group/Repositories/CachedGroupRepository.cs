@@ -57,9 +57,9 @@ public class CachedGroupRepository : CachedGroupRepositoryInterface
         return result;
     }
 
-    private string GetAllKeyCache()
+    public string GetAllKeyCache()
     {
-        return String.Format("{0}:ALL", GROUP_CACHE);
+        return string.Format("{0}:ALL", GROUP_CACHE);
     }
 
     public async Task<GetGroupResult> Get(int id)
@@ -67,7 +67,7 @@ public class CachedGroupRepository : CachedGroupRepositoryInterface
         var result = new GetGroupResult();
         if (id <= 0)
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "id");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id");
             return result;
         }
 
@@ -93,9 +93,9 @@ public class CachedGroupRepository : CachedGroupRepositoryInterface
         return result;
     }
 
-    private string GetIdKeyCache(long id)
+    public string GetIdKeyCache(int id)
     {
-        return String.Format("{0}:{1}", GROUP_CACHE, id);
+        return string.Format("{0}:{1}", GROUP_CACHE, id);
     }
 
     public async Task<GetGroupResult> Update(GroupEntity? data)

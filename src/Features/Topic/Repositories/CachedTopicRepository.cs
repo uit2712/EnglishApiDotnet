@@ -59,7 +59,7 @@ public class CachedTopicRepository : CachedTopicRepositoryInterface
 
     private string GetAllKeyCache()
     {
-        return String.Format("{0}:ALL", GROUP_CACHE);
+        return string.Format("{0}:ALL", GROUP_CACHE);
     }
 
     public async Task<GetTopicResult> Get(int id)
@@ -67,7 +67,7 @@ public class CachedTopicRepository : CachedTopicRepositoryInterface
         var result = new GetTopicResult();
         if (id <= 0)
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "id");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id");
             return result;
         }
 
@@ -95,7 +95,7 @@ public class CachedTopicRepository : CachedTopicRepositoryInterface
 
     private string GetIdKeyCache(long id)
     {
-        return String.Format("{0}:{1}", GROUP_CACHE, id);
+        return string.Format("{0}:{1}", GROUP_CACHE, id);
     }
 
     public async Task<GetTopicResult> UpdateTopicName(int id, string name)
@@ -114,7 +114,7 @@ public class CachedTopicRepository : CachedTopicRepositoryInterface
         var result = new GetListTopicsResult();
         if (groupId <= 0)
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "groupId");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "groupId");
             return result;
         }
 
@@ -155,6 +155,6 @@ public class CachedTopicRepository : CachedTopicRepositoryInterface
 
     private string GetGroupIdKeyCache(int id)
     {
-        return String.Format("{0}:GroupId:{1}", GROUP_CACHE, id);
+        return string.Format("{0}:GroupId:{1}", GROUP_CACHE, id);
     }
 }

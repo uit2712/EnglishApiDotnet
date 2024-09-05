@@ -32,7 +32,7 @@ public class GroupRepository : GroupRepositoryInterface
         var result = new GetGroupResult();
         if (id <= 0)
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "id");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id");
             return result;
         }
 
@@ -54,13 +54,13 @@ public class GroupRepository : GroupRepositoryInterface
         var result = new GetGroupResult();
         if (null == data)
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "data");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "data");
             return result;
         }
 
         if (data.Id <= 0)
         {
-            result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "id");
+            result.Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id");
             return result;
         }
 
@@ -70,7 +70,7 @@ public class GroupRepository : GroupRepositoryInterface
             return result;
         }
 
-        if (String.IsNullOrEmpty(data.Name) == false)
+        if (string.IsNullOrEmpty(data.Name) == false)
         {
             result.Data.Name = data.Name.Trim();
         }

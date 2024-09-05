@@ -6,8 +6,9 @@ using Moq;
 using Xunit;
 using Core.EnglishContext;
 using Core.Features.Group.Repositories;
+using Core.Features.Group.InterfaceAdapters;
 
-namespace english_api_dotnet.UnitTests;
+namespace Core.UnitTests;
 
 public class GroupRepositoryTests
 {
@@ -17,12 +18,19 @@ public class GroupRepositoryTests
         new GroupEntity { Id=2, Name = "Group 2" },
     };
 
-    protected IEnglishContext MockContext()
+    protected Mock<IEnglishContext> MockContext()
     {
         var mockContext = new Mock<IEnglishContext>();
         mockContext.Setup(c => c.Groups).ReturnsDbSet(data);
 
-        return mockContext.Object;
+        return mockContext;
+    }
+
+    protected GroupRepositoryInterface MockRepo()
+    {
+        var repo = new GroupRepository(MockContext().Object);
+
+        return repo;
     }
 
     [Theory]
@@ -30,13 +38,13 @@ public class GroupRepositoryTests
     [InlineData(0)]
     public async void Get_Invalid_Id(int id)
     {
-        var repo = new GroupRepository(MockContext());
+        var mockRepo = MockRepo();
 
         var expectedResult = new GetGroupResult
         {
             Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id")
         };
-        var actualResult = await repo.Get(id);
+        var actualResult = await mockRepo.Get(id);
 
         Assert.False(actualResult.Success);
         Assert.Equal(expectedResult.Success, actualResult.Success);
@@ -48,7 +56,7 @@ public class GroupRepositoryTests
     [InlineData(2)]
     public async void Get_Success(int id)
     {
-        var repo = new GroupRepository(MockContext());
+        var mockRepo = MockRepo();
 
         var expectedResult = new GetGroupResult
         {
@@ -56,7 +64,7 @@ public class GroupRepositoryTests
             Data = data.FirstOrDefault(item => item.Id == id),
             Message = string.Format(ErrorMessage.FOUND_ITEM, "group")
         };
-        var actualResult = await repo.Get(id);
+        var actualResult = await mockRepo.Get(id);
 
         Assert.True(actualResult.Success);
         Assert.Equal(expectedResult.Success, actualResult.Success);
@@ -67,15 +75,15 @@ public class GroupRepositoryTests
     [Theory]
     [InlineData(3)]
     [InlineData(4)]
-    public async void Get_NotFound(int id)
+    public async void Get_Failed_Not_Found_Any_Item(int id)
     {
-        var repo = new GroupRepository(MockContext());
+        var mockRepo = MockRepo();
 
         var expectedResult = new GetGroupResult
         {
             Data = data.FirstOrDefault(item => item.Id == id)
         };
-        var actualResult = await repo.Get(id);
+        var actualResult = await mockRepo.Get(id);
 
         Assert.False(actualResult.Success);
         Assert.Equal(expectedResult.Success, actualResult.Success);
