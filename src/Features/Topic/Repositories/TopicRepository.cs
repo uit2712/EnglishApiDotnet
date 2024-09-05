@@ -1,5 +1,5 @@
 using Core.Constants;
-using Core.Features.Topic.Entities;
+using Core.EnglishContext;
 using Core.Features.Topic.InterfaceAdapters;
 using Core.Features.Topic.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +8,9 @@ namespace Core.Features.Topic.Repositories;
 
 public class TopicRepository : TopicRepositoryInterface
 {
-    private Core.EnglishContext.EnglishContext _context;
+    private IEnglishContext _context;
 
-    public TopicRepository(Core.EnglishContext.EnglishContext context)
+    public TopicRepository(IEnglishContext context)
     {
         _context = context;
     }

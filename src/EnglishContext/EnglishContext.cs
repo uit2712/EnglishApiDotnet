@@ -5,13 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.EnglishContext;
 
-public class EnglishContext : DbContext
+public class EnglishContext : DbContext, IEnglishContext
 {
-    public EnglishContext(DbContextOptions<EnglishContext> options)
-        : base(options)
-    {
-    }
-
     public DbSet<VocabularyEntity> Vocabularies { get; set; } = null!;
     public DbSet<TopicEntity> Topics { get; set; } = null!;
     public DbSet<GroupEntity> Groups { get; set; } = null!;

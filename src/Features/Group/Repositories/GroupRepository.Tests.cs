@@ -6,6 +6,8 @@ using Moq.EntityFrameworkCore;
 using Moq;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
+using Core.EnglishContext;
+using Core.Features.Group.Repositories;
 
 namespace english_api_dotnet.UnitTests;
 
@@ -22,20 +24,47 @@ public class GroupRepositoryTests
             new GroupEntity { Id=2, Name = "Group 2" },
         };
 
-        var options = new Mock<DbContextOptions<Core.EnglishContext.EnglishContext>>();
-        var mockContext = new Mock<Core.EnglishContext.EnglishContext>();
-        mockContext.Setup(c => c.Set<GroupEntity>()).ReturnsDbSet(data);
+        var mockContext = new Mock<IEnglishContext>();
+        mockContext.Setup(c => c.Groups).ReturnsDbSet(data);
 
-        var mockRepo = new Mock<GroupRepositoryInterface>(mockContext.Object);
+        var repo = new GroupRepository(mockContext.Object);
 
         var expectedResult = new GetGroupResult
         {
             Message = string.Format(ErrorMessage.INVALID_PARAMETER, "id")
         };
-        var actualResult = await mockRepo.Object.Get(id);
+        var actualResult = await repo.Get(id);
 
         Assert.False(actualResult.Success);
         Assert.Equal(expectedResult.Success, actualResult.Success);
         Assert.Equal(expectedResult.Message, actualResult.Message);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async void Get_Success(int id)
+    {
+        var data = new List<GroupEntity>
+        {
+            new GroupEntity { Id=1, Name = "Group 1" },
+            new GroupEntity { Id=2, Name = "Group 2" },
+        };
+
+        var mockContext = new Mock<IEnglishContext>();
+        mockContext.Setup(c => c.Groups).ReturnsDbSet(data);
+
+        var repo = new GroupRepository(mockContext.Object);
+
+        var expectedResult = new GetGroupResult
+        {
+            Success = true,
+            Data = data.FirstOrDefault(item => item.Id == id)
+        };
+        var actualResult = await repo.Get(id);
+
+        Assert.True(actualResult.Success);
+        Assert.Equal(expectedResult.Success, actualResult.Success);
+        Assert.Equal(expectedResult.Data, actualResult.Data);
     }
 }

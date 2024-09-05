@@ -1,4 +1,5 @@
 using Core.Constants;
+using Core.EnglishContext;
 using Core.Features.Vocabulary.InterfaceAdapters;
 using Core.Features.Vocabulary.Models;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +8,9 @@ namespace Core.Features.Vocabulary.Repositories;
 
 public class VocabularyRepository : VocabularyRepositoryInterface
 {
-    private Core.EnglishContext.EnglishContext _context;
+    private IEnglishContext _context;
 
-    public VocabularyRepository(Core.EnglishContext.EnglishContext context)
+    public VocabularyRepository(IEnglishContext context)
     {
         _context = context;
     }
@@ -20,7 +21,8 @@ public class VocabularyRepository : VocabularyRepositoryInterface
         {
             Data = await this._context.Vocabularies.ToListAsync()
         };
-        if (null == result.Data) {
+        if (null == result.Data)
+        {
             result.Message = "Get all vocabularies failed";
             return result;
         }
@@ -36,7 +38,8 @@ public class VocabularyRepository : VocabularyRepositoryInterface
         {
             Data = await this._context.Vocabularies.FirstOrDefaultAsync(item => item.Id == id)
         };
-        if (null == result.Data) {
+        if (null == result.Data)
+        {
             result.Message = "Get vocabulary by id failed";
             return result;
         }
@@ -46,9 +49,11 @@ public class VocabularyRepository : VocabularyRepositoryInterface
         return result;
     }
 
-    public async Task<GetListVocabulariesResult> GetByTopicId(long topicId) {
+    public async Task<GetListVocabulariesResult> GetByTopicId(long topicId)
+    {
         var result = new GetListVocabulariesResult();
-        if (topicId <= 0) {
+        if (topicId <= 0)
+        {
             result.Message = String.Format(ErrorMessage.INVALID_PARAMETER, "topicId");
             return result;
         }

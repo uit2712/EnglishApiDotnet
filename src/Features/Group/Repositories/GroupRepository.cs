@@ -1,4 +1,5 @@
 using Core.Constants;
+using Core.EnglishContext;
 using Core.Features.Group.Entities;
 using Core.Features.Group.InterfaceAdapters;
 using Core.Features.Group.Models;
@@ -8,9 +9,9 @@ namespace Core.Features.Group.Repositories;
 
 public class GroupRepository : GroupRepositoryInterface
 {
-    private Core.EnglishContext.EnglishContext _context;
+    private IEnglishContext _context;
 
-    public GroupRepository(Core.EnglishContext.EnglishContext context)
+    public GroupRepository(IEnglishContext context)
     {
         _context = context;
     }
