@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Core.Features.Group.Entities;
 using Core.Features.Vocabulary.Entities;
 using Newtonsoft.Json;
 
 namespace Core.Features.Topic.Entities;
 
+[Table("topics")]
 public class TopicEntity
 {
     [Key]

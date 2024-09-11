@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace english_api_dotnet.Migrations
 {
     [DbContext(typeof(EnglishContext))]
-    [Migration("20240911203633_Init")]
+    [Migration("20240911204652_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -62,7 +62,7 @@ namespace english_api_dotnet.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Topics");
+                    b.ToTable("topics");
                 });
 
             modelBuilder.Entity("Core.Features.Vocabulary.Entities.VocabularyEntity", b =>
@@ -97,7 +97,7 @@ namespace english_api_dotnet.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("Vocabularies");
+                    b.ToTable("vocabularies");
                 });
 
             modelBuilder.Entity("Core.Features.Topic.Entities.TopicEntity", b =>

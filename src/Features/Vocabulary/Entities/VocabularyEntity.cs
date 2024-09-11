@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Core.Features.Topic.Entities;
 using Newtonsoft.Json;
 
 namespace Core.Features.Vocabulary.Entities;
 
+[Table("vocabularies")]
 public class VocabularyEntity
 {
     [Key]

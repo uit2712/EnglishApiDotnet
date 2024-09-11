@@ -59,7 +59,7 @@ namespace english_api_dotnet.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Topics");
+                    b.ToTable("topics");
                 });
 
             modelBuilder.Entity("Core.Features.Vocabulary.Entities.VocabularyEntity", b =>
@@ -94,7 +94,7 @@ namespace english_api_dotnet.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("Vocabularies");
+                    b.ToTable("vocabularies");
                 });
 
             modelBuilder.Entity("Core.Features.Topic.Entities.TopicEntity", b =>

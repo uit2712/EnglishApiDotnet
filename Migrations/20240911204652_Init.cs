@@ -24,7 +24,7 @@ namespace english_api_dotnet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Topics",
+                name: "topics",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -34,9 +34,9 @@ namespace english_api_dotnet.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Topics", x => x.Id);
+                    table.PrimaryKey("PK_topics", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Topics_groups_GroupId",
+                        name: "FK_topics_groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "groups",
                         principalColumn: "Id",
@@ -44,7 +44,7 @@ namespace english_api_dotnet.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vocabularies",
+                name: "vocabularies",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -57,23 +57,23 @@ namespace english_api_dotnet.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vocabularies", x => x.Id);
+                    table.PrimaryKey("PK_vocabularies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vocabularies_Topics_TopicId",
+                        name: "FK_vocabularies_topics_TopicId",
                         column: x => x.TopicId,
-                        principalTable: "Topics",
+                        principalTable: "topics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Topics_GroupId",
-                table: "Topics",
+                name: "IX_topics_GroupId",
+                table: "topics",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vocabularies_TopicId",
-                table: "Vocabularies",
+                name: "IX_vocabularies_TopicId",
+                table: "vocabularies",
                 column: "TopicId");
         }
 
@@ -81,10 +81,10 @@ namespace english_api_dotnet.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Vocabularies");
+                name: "vocabularies");
 
             migrationBuilder.DropTable(
-                name: "Topics");
+                name: "topics");
 
             migrationBuilder.DropTable(
                 name: "groups");

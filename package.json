@@ -4,6 +4,7 @@
         "install": "dotnet add package Microsoft.EntityFrameworkCore && dotnet add package Microsoft.EntityFrameworkCore.SqlServer",
         "build": "dotnet build -c Release -o ./docker/publish/release",
         "build:dev": "dotnet build -c Debug -o ./docker/publish/debug",
-        "add:migration": "./migration.sh"
+        "up:migration": "dotnet ef database update --connection \"Server=127.0.0.1;Database=test;User=sa;Password=2E[3VV'F|Fku4AUVf~s6;TrustServerCertificate=True\"",
+        "down:migration": "dotnet ef database update 0 --connection \"Server=127.0.0.1;Database=test;User=sa;Password=2E[3VV'F|Fku4AUVf~s6;TrustServerCertificate=True\""
     }
 }
