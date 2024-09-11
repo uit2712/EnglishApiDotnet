@@ -1,4 +1,5 @@
 using Core.EnglishContext;
+using Core.Features.FileReader.DependencyInjection;
 using Core.Features.Group.DependencyInjection;
 using Core.Features.Topic.DependencyInjection;
 using Core.Features.Vocabulary.DependencyInjection;
@@ -22,6 +23,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IEnglishContext, EnglishContext>();
 
+FileReaderDependencyInjection.Init(builder.Services);
 VocabularyDependencyInjection.Init(builder.Services);
 TopicDependencyInjection.Init(builder.Services);
 GroupDependencyInjection.Init(builder.Services);
