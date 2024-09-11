@@ -1,11 +1,7 @@
 using Core.EnglishContext;
 using Core.Features.Group.DependencyInjection;
 using Core.Features.Topic.DependencyInjection;
-using Core.Features.Topic.InterfaceAdapters;
-using Core.Features.Topic.Repositories;
-using Core.Features.Topic.UseCases;
-using Core.Features.Vocabulary.InterfaceAdapters;
-using Core.Features.Vocabulary.Repositories;
+using Core.Features.Vocabulary.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,9 +22,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IEnglishContext, EnglishContext>();
 
-builder.Services.AddScoped<VocabularyRepositoryInterface, VocabularyRepository>();
-builder.Services.AddScoped<CachedVocabularyRepositoryInterface, CachedVocabularyRepository>();
-
+VocabularyDependencyInjection.Init(builder.Services);
 TopicDependencyInjection.Init(builder.Services);
 GroupDependencyInjection.Init(builder.Services);
 
