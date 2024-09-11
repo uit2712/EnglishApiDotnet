@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using Core.Features.Topic.Entities;
 using Newtonsoft.Json;
 
 namespace Core.Features.Vocabulary.Entities;
 
-public class VocabularyEntity {
+public class VocabularyEntity
+{
     [Key]
     [JsonProperty]
     public long Id { get; set; }
@@ -19,4 +21,5 @@ public class VocabularyEntity {
     public string? Image { get; set; }
     [JsonProperty]
     public int TopicId { get; set; }
+    public TopicEntity Topic { get; set; }
 }

@@ -3,6 +3,7 @@
         "start": "dotnet run --launch-profile https",
         "install": "dotnet add package Microsoft.EntityFrameworkCore && dotnet add package Microsoft.EntityFrameworkCore.SqlServer",
         "build": "dotnet build -c Release -o ./docker/publish/release",
-        "build:dev": "dotnet build -c Debug -o ./docker/publish/debug"
+        "build:dev": "dotnet build -c Debug -o ./docker/publish/debug",
+        "add:migration": "./migration.sh"
     }
 }

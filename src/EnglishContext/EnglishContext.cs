@@ -10,9 +10,25 @@ public class EnglishContext : DbContext, IEnglishContext
     public EnglishContext(DbContextOptions<EnglishContext> options)
         : base(options)
     {
+
     }
 
     public DbSet<VocabularyEntity> Vocabularies { get; set; } = null!;
     public DbSet<TopicEntity> Topics { get; set; } = null!;
     public DbSet<GroupEntity> Groups { get; set; } = null!;
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<GroupEntity>()
+            .HasMany(e => e.Topics)
+            .WithOne(e => e.Group)
+            .HasForeignKey(e => e.GroupId)
+            .HasPrincipalKey(e => e.Id);
+
+        modelBuilder.Entity<TopicEntity>()
+            .HasMany(e => e.Vocabularies)
+            .WithOne(e => e.Topic)
+            .HasForeignKey(e => e.TopicId)
+            .HasPrincipalKey(e => e.Id);
+    }
 }
