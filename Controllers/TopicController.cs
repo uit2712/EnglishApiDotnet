@@ -15,13 +15,15 @@ public class TopicController : ControllerBase
     private readonly UpdateTopicUseCase updateTopicUseCase;
     private readonly GetTopicByIdUseCase getTopicByIdUseCase;
     private readonly SeedTopicsFromFileUseCase seedTopicsFromFileUseCase;
+    private readonly GetTopicsFromFileUseCase getTopicsFromFileUseCase;
 
     public TopicController(
         CachedTopicRepositoryInterface db,
         GetListVocabulariesByTopicIdUseCase getListVocabulariesByTopicIdUseCase,
         UpdateTopicUseCase updateTopicUseCase,
         GetTopicByIdUseCase getTopicByIdUseCase,
-        SeedTopicsFromFileUseCase seedTopicsFromFileUseCase
+        SeedTopicsFromFileUseCase seedTopicsFromFileUseCase,
+        GetTopicsFromFileUseCase getTopicsFromFileUseCase
     )
     {
         this.db = db;
@@ -29,6 +31,7 @@ public class TopicController : ControllerBase
         this.updateTopicUseCase = updateTopicUseCase;
         this.getTopicByIdUseCase = getTopicByIdUseCase;
         this.seedTopicsFromFileUseCase = seedTopicsFromFileUseCase;
+        this.getTopicsFromFileUseCase = getTopicsFromFileUseCase;
     }
 
     [HttpGet]
@@ -59,5 +62,11 @@ public class TopicController : ControllerBase
     public Result<bool> SeedFromFile()
     {
         return seedTopicsFromFileUseCase.Invoke();
+    }
+
+    [HttpGet("getFromFile")]
+    public GetListTopicsResult GetFromFile()
+    {
+        return getTopicsFromFileUseCase.Invoke();
     }
 }
