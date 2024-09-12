@@ -1,6 +1,7 @@
 using Core.Features.Topic.InterfaceAdapters;
 using Core.Features.Topic.Models;
 using Core.Features.Topic.UseCases;
+using Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace english_api_dotnet.Controllers;
@@ -13,18 +14,21 @@ public class TopicController : ControllerBase
     private readonly GetListVocabulariesByTopicIdUseCase getListVocabulariesByTopicIdUseCase;
     private readonly UpdateTopicUseCase updateTopicUseCase;
     private readonly GetTopicByIdUseCase getTopicByIdUseCase;
+    private readonly SeedTopicsFromFileUseCase seedTopicsFromFileUseCase;
 
     public TopicController(
         CachedTopicRepositoryInterface db,
         GetListVocabulariesByTopicIdUseCase getListVocabulariesByTopicIdUseCase,
         UpdateTopicUseCase updateTopicUseCase,
-        GetTopicByIdUseCase getTopicByIdUseCase
+        GetTopicByIdUseCase getTopicByIdUseCase,
+        SeedTopicsFromFileUseCase seedTopicsFromFileUseCase
     )
     {
         this.db = db;
         this.getListVocabulariesByTopicIdUseCase = getListVocabulariesByTopicIdUseCase;
         this.updateTopicUseCase = updateTopicUseCase;
         this.getTopicByIdUseCase = getTopicByIdUseCase;
+        this.seedTopicsFromFileUseCase = seedTopicsFromFileUseCase;
     }
 
     [HttpGet]
@@ -49,5 +53,11 @@ public class TopicController : ControllerBase
     public async Task<GetTopicResult> Update(UpdateTopicViewModel model)
     {
         return await updateTopicUseCase.Invoke(model.Id, model.Name);
+    }
+
+    [HttpPost("seedFromFile")]
+    public Result<bool> SeedFromFile()
+    {
+        return seedTopicsFromFileUseCase.Invoke();
     }
 }

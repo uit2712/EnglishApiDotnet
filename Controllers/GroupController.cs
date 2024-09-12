@@ -1,6 +1,7 @@
 using Core.Features.Group.Models;
 using Core.Features.Group.UseCases;
 using Core.Features.Topic.Models;
+using Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace english_api_dotnet.Controllers;
@@ -12,19 +13,19 @@ public class GroupController : ControllerBase
     private readonly GetAllGroupsUseCase getAllGroupsUseCase;
     private readonly GetGroupByIdUseCase getGroupByIdUseCase;
     private readonly GetListTopicsByGroupIdUseCase getListTopicsByGroupIdUseCase;
-    private readonly GetAllGroupsFromFileUseCase getAllGroupsFromFileUseCase;
+    private readonly SeedGroupsFromFileUseCase seedGroupsFromFileUseCase;
 
     public GroupController(
         GetAllGroupsUseCase getAllGroupsUseCase,
         GetGroupByIdUseCase getGroupByIdUseCase,
         GetListTopicsByGroupIdUseCase getListTopicsByGroupIdUseCase,
-        GetAllGroupsFromFileUseCase getAllGroupsFromFileUseCase
+        SeedGroupsFromFileUseCase seedGroupsFromFileUseCase
     )
     {
         this.getAllGroupsUseCase = getAllGroupsUseCase;
         this.getGroupByIdUseCase = getGroupByIdUseCase;
         this.getListTopicsByGroupIdUseCase = getListTopicsByGroupIdUseCase;
-        this.getAllGroupsFromFileUseCase = getAllGroupsFromFileUseCase;
+        this.seedGroupsFromFileUseCase = seedGroupsFromFileUseCase;
     }
 
     [HttpGet]
@@ -45,9 +46,9 @@ public class GroupController : ControllerBase
         return await getListTopicsByGroupIdUseCase.Invoke(id);
     }
 
-    [HttpGet("GetFromFile")]
-    public GetListGroupsResult GetFromFile()
+    [HttpPost("seedFromFile")]
+    public Result<bool> SeedFromFile()
     {
-        return getAllGroupsFromFileUseCase.Invoke();
+        return seedGroupsFromFileUseCase.Invoke();
     }
 }
