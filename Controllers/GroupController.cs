@@ -1,3 +1,5 @@
+using Core.Common.UseCases;
+using Core.Features.Group.Entities;
 using Core.Features.Group.Models;
 using Core.Features.Group.UseCases;
 using Core.Features.Topic.Models;
@@ -13,13 +15,13 @@ public class GroupController : ControllerBase
     private readonly GetAllGroupsUseCase getAllGroupsUseCase;
     private readonly GetGroupByIdUseCase getGroupByIdUseCase;
     private readonly GetListTopicsByGroupIdUseCase getListTopicsByGroupIdUseCase;
-    private readonly SeedGroupsFromFileUseCase seedGroupsFromFileUseCase;
+    private readonly SeedDataFromFileUseCase<GroupEntity> seedGroupsFromFileUseCase;
 
     public GroupController(
         GetAllGroupsUseCase getAllGroupsUseCase,
         GetGroupByIdUseCase getGroupByIdUseCase,
         GetListTopicsByGroupIdUseCase getListTopicsByGroupIdUseCase,
-        SeedGroupsFromFileUseCase seedGroupsFromFileUseCase
+        SeedDataFromFileUseCase<GroupEntity> seedGroupsFromFileUseCase
     )
     {
         this.getAllGroupsUseCase = getAllGroupsUseCase;

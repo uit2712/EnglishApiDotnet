@@ -1,3 +1,5 @@
+using Core.Common.UseCases;
+using Core.Features.Topic.Entities;
 using Core.Features.Topic.InterfaceAdapters;
 using Core.Features.Topic.Models;
 using Core.Features.Topic.UseCases;
@@ -14,16 +16,16 @@ public class TopicController : ControllerBase
     private readonly GetListVocabulariesByTopicIdUseCase getListVocabulariesByTopicIdUseCase;
     private readonly UpdateTopicUseCase updateTopicUseCase;
     private readonly GetTopicByIdUseCase getTopicByIdUseCase;
-    private readonly SeedTopicsFromFileUseCase seedTopicsFromFileUseCase;
-    private readonly GetTopicsFromFileUseCase getTopicsFromFileUseCase;
+    private readonly SeedDataFromFileUseCase<TopicEntity> seedTopicsFromFileUseCase;
+    private readonly GetDataFromFileUseCase<TopicEntity> getTopicsFromFileUseCase;
 
     public TopicController(
         CachedTopicRepositoryInterface db,
         GetListVocabulariesByTopicIdUseCase getListVocabulariesByTopicIdUseCase,
         UpdateTopicUseCase updateTopicUseCase,
         GetTopicByIdUseCase getTopicByIdUseCase,
-        SeedTopicsFromFileUseCase seedTopicsFromFileUseCase,
-        GetTopicsFromFileUseCase getTopicsFromFileUseCase
+        SeedDataFromFileUseCase<TopicEntity> seedTopicsFromFileUseCase,
+        GetDataFromFileUseCase<TopicEntity> getTopicsFromFileUseCase
     )
     {
         this.db = db;
@@ -65,7 +67,7 @@ public class TopicController : ControllerBase
     }
 
     [HttpGet("getFromFile")]
-    public GetListTopicsResult GetFromFile()
+    public Result<IEnumerable<TopicEntity>> GetFromFile()
     {
         return getTopicsFromFileUseCase.Invoke();
     }
