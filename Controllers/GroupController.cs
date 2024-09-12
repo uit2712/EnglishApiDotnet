@@ -16,18 +16,21 @@ public class GroupController : ControllerBase
     private readonly GetGroupByIdUseCase getGroupByIdUseCase;
     private readonly GetListTopicsByGroupIdUseCase getListTopicsByGroupIdUseCase;
     private readonly SeedDataFromFileUseCase<GroupEntity> seedGroupsFromFileUseCase;
+    private readonly GetDataFromFileUseCase<GroupEntity> getListGroupsFromFileUseCase;
 
     public GroupController(
         GetAllGroupsUseCase getAllGroupsUseCase,
         GetGroupByIdUseCase getGroupByIdUseCase,
         GetListTopicsByGroupIdUseCase getListTopicsByGroupIdUseCase,
-        SeedDataFromFileUseCase<GroupEntity> seedGroupsFromFileUseCase
+        SeedDataFromFileUseCase<GroupEntity> seedGroupsFromFileUseCase,
+        GetDataFromFileUseCase<GroupEntity> getListGroupsFromFileUseCase
     )
     {
         this.getAllGroupsUseCase = getAllGroupsUseCase;
         this.getGroupByIdUseCase = getGroupByIdUseCase;
         this.getListTopicsByGroupIdUseCase = getListTopicsByGroupIdUseCase;
         this.seedGroupsFromFileUseCase = seedGroupsFromFileUseCase;
+        this.getListGroupsFromFileUseCase = getListGroupsFromFileUseCase;
     }
 
     [HttpGet]
@@ -52,5 +55,11 @@ public class GroupController : ControllerBase
     public Result<bool> SeedFromFile()
     {
         return seedGroupsFromFileUseCase.Invoke();
+    }
+
+    [HttpGet("getFromFile")]
+    public Result<IEnumerable<GroupEntity>> GetFromFile()
+    {
+        return getListGroupsFromFileUseCase.Invoke();
     }
 }
