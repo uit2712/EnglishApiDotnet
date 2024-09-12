@@ -3,6 +3,7 @@ using Core.Features.FileReader.DependencyInjection;
 using Core.Features.Group.DependencyInjection;
 using Core.Features.Topic.DependencyInjection;
 using Core.Features.Vocabulary.DependencyInjection;
+using Core.Seed;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +44,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+
+        SeedData.Initialize(services);
+    }
 }
 
 app.UseHttpsRedirection();
