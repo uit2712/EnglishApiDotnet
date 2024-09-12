@@ -26,16 +26,10 @@ public class VocabularyController : ControllerBase
         this.seedListVocabulariesFromFileUseCase = seedListVocabulariesFromFileUseCase;
     }
 
-    [HttpGet]
-    public async Task<GetListVocabulariesResult> Get()
-    {
-        return await this.db.GetAll();
-    }
-
     [HttpGet("{id}")]
     public async Task<GetVocabularyResult> GetById(long id)
     {
-        return await this.db.Get(id);
+        return await db.Get(id);
     }
 
     [HttpGet("getFromFile")]
