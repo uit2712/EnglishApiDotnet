@@ -21,7 +21,9 @@ services:
     restart: always
     volumes:
       - ./db:/var/opt/mssql/data
+      - ./import-db:/docker-entrypoint-initdb.d
     user: root
+    # command: "/opt/mssql-tools18/bin/sqlcmd -l 5 -S 127.0.0.1 -U sa -P '${MSSQL_SA_PASSWORD}' -C -d master -i docker-entrypoint-initdb.d/db.sql"
     environment:
       MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
       MSSQL_PASSWORD: ${MSSQL_SA_PASSWORD}
@@ -69,7 +71,5 @@ services:
 
 networks:
   dotnet-network:
-
-volumes:
-  sln_file:
+    external: true
     

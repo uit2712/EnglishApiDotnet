@@ -1,4 +1,4 @@
-using Core.EnglishContext;
+using Core.Context;
 using Core.Features.FileReader.DependencyInjection;
 using Core.Features.Group.DependencyInjection;
 using Core.Features.Topic.DependencyInjection;
