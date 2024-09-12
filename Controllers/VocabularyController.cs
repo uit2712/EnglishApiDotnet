@@ -13,14 +13,17 @@ public class VocabularyController : ControllerBase
 {
     private readonly CachedVocabularyRepositoryInterface db;
     private readonly GetDataFromFileUseCase<VocabularyEntity> getListVocabulariesFromFileUseCase;
+    private readonly SeedDataFromFileUseCase<VocabularyEntity> seedListVocabulariesFromFileUseCase;
 
     public VocabularyController(
         CachedVocabularyRepositoryInterface db,
-        GetDataFromFileUseCase<VocabularyEntity> getListVocabulariesFromFileUseCase
+        GetDataFromFileUseCase<VocabularyEntity> getListVocabulariesFromFileUseCase,
+        SeedDataFromFileUseCase<VocabularyEntity> seedListVocabulariesFromFileUseCase
     )
     {
         this.db = db;
         this.getListVocabulariesFromFileUseCase = getListVocabulariesFromFileUseCase;
+        this.seedListVocabulariesFromFileUseCase = seedListVocabulariesFromFileUseCase;
     }
 
     [HttpGet]
@@ -39,5 +42,11 @@ public class VocabularyController : ControllerBase
     public Result<IEnumerable<VocabularyEntity>> GetFromFile()
     {
         return getListVocabulariesFromFileUseCase.Invoke();
+    }
+
+    [HttpPost("seedFromFile")]
+    public Result<bool> SeedFromFile()
+    {
+        return seedListVocabulariesFromFileUseCase.Invoke();
     }
 }
